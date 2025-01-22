@@ -1,0 +1,94 @@
+Configuration	DevEBox
+STM32CubeMX 	6.13.0
+Date	01/22/2025
+MCU	STM32H743VITx
+
+
+
+PERIPHERALS	MODES	FUNCTIONS	PINS
+DEBUG	Serial Wire	DEBUG_JTCK-SWCLK	PA14 (JTCK/SWCLK)
+DEBUG	Serial Wire	DEBUG_JTMS-SWDIO	PA13 (JTMS/SWDIO)
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO0	PD11
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO1	PD12
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO2	PE2
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO3	PD13
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_NCS	PB6
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_CLK	PB2
+RCC	BYPASS Clock Source	RCC_OSC_IN	PH0-OSC_IN (PH0)
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+USB_OTG_FS	Device_Only	USB_OTG_FS_DM	PA11
+USB_OTG_FS	Device_Only	USB_OTG_FS_DP	PA12
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+1	PE2	QUADSPI_BK1_IO2	
+12	PH0-OSC_IN (PH0)	RCC_OSC_IN	
+13	PH1-OSC_OUT (PH1)*	RCC_OSC_OUT	
+23	PA1	GPIO_Output	LED2
+36	PB2	QUADSPI_CLK	
+58	PD11	QUADSPI_BK1_IO0	
+59	PD12	QUADSPI_BK1_IO1	
+60	PD13	QUADSPI_BK1_IO3	
+70	PA11	USB_OTG_FS_DM	
+71	PA12	USB_OTG_FS_DP	
+72	PA13 (JTMS/SWDIO)	DEBUG_JTMS-SWDIO	
+76	PA14 (JTCK/SWCLK)	DEBUG_JTCK-SWCLK	
+92	PB6	QUADSPI_BK1_NCS	
+PERIPHERALS	MODES	FUNCTIONS	PINS
+DEBUG	Serial Wire	DEBUG_JTCK-SWCLK	PA14 (JTCK/SWCLK)
+DEBUG	Serial Wire	DEBUG_JTMS-SWDIO	PA13 (JTMS/SWDIO)
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO0	PD11
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO1	PD12
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO2	PE2
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_IO3	PD13
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_BK1_NCS	PB6
+QUADSPI	Bank1 with Quad SPI Lines	QUADSPI_CLK	PB2
+RCC	BYPASS Clock Source	RCC_OSC_IN	PH0-OSC_IN (PH0)
+SYS	SysTick	SYS_VS_Systick	VP_SYS_VS_Systick
+USB_OTG_FS	Device_Only	USB_OTG_FS_DM	PA11
+USB_OTG_FS	Device_Only	USB_OTG_FS_DP	PA12
+
+
+
+Pin Nb	PINs	FUNCTIONs	LABELs
+1	PE2	QUADSPI_BK1_IO2	
+12	PH0-OSC_IN (PH0)	RCC_OSC_IN	
+13	PH1-OSC_OUT (PH1)*	RCC_OSC_OUT	
+23	PA1	GPIO_Output	LED2
+36	PB2	QUADSPI_CLK	
+58	PD11	QUADSPI_BK1_IO0	
+59	PD12	QUADSPI_BK1_IO1	
+60	PD13	QUADSPI_BK1_IO3	
+70	PA11	USB_OTG_FS_DM	
+71	PA12	USB_OTG_FS_DP	
+72	PA13 (JTMS/SWDIO)	DEBUG_JTMS-SWDIO	
+76	PA14 (JTCK/SWCLK)	DEBUG_JTCK-SWCLK	
+92	PB6	QUADSPI_BK1_NCS	
+
+
+
+SOFTWARE PROJECT
+
+Project Settings : 
+Project Name : DevEBox
+Project Folder : C:\Users\Butch\STM32CubeIDE\workspace_1.17.0\DevEBox
+Toolchain / IDE : STM32CubeIDE
+Firmware Package Name and Version : STM32Cube FW_H7 V1.12.1
+
+
+Code Generation Settings : 
+STM32Cube MCU packages and embedded software packs : Copy only the necessary library files
+Generate peripheral initialization as a pair of '.c/.h' files per peripheral : Yes
+Backup previously generated files when re-generating : No
+Delete previously generated files when not re-generated : Yes
+Set all free pins as analog (to optimize the power consumption) : No
+
+
+Toolchains Settings : 
+Compiler Optimizations : 
+
+
+
+
+
