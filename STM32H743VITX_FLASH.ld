@@ -166,6 +166,13 @@ SECTIONS
     . = ALIGN(8);
   } >RAM_D1
 
+  .DMA_Buffer_section :
+  {
+    . = ALIGN(32);
+    *(.DMABufferSection) 
+  } >RAM_D3
+  
+
   /* Remove information from the standard libraries */
   /DISCARD/ :
   {
