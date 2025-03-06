@@ -22,6 +22,7 @@
 #include "bdma.h"
 #include "memorymap.h"
 #include "quadspi.h"
+#include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
@@ -99,6 +100,7 @@ int main(void)
   MX_QUADSPI_Init();
   MX_ADC3_Init();
   MX_USB_DEVICE_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -115,6 +117,13 @@ int main(void)
 		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
 		HAL_Delay(100);
 		DebugTask();
+		uint32_t ADC_val = CalcTemperature();
+		if (ADC_val>0)
+		{
+			char buffer[32];
+			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
+			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
+		}
 	}
   /* USER CODE END 3 */
 }
@@ -223,7 +232,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   /* USER CODE BEGIN Callback 0 */
 
   /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
+  if (htim->Instance == TIM1)
+  {
     HAL_IncTick();
   }
   /* USER CODE BEGIN Callback 1 */
