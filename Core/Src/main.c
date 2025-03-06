@@ -20,6 +20,7 @@
 #include "main.h"
 #include "adc.h"
 #include "bdma.h"
+#include "i2c.h"
 #include "memorymap.h"
 #include "quadspi.h"
 #include "usart.h"
@@ -28,6 +29,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "i2c-lcd.h"
 #include "debug_console.h"
 /* USER CODE END Includes */
 
@@ -101,7 +103,9 @@ int main(void)
   MX_ADC3_Init();
   MX_USB_DEVICE_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  lcd_init();
 
   /* USER CODE END 2 */
 
@@ -123,6 +127,11 @@ int main(void)
 			char buffer[32];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
 			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
+			lcd_put_cur(0,0);
+			lcd_send_string("    ADC_Val     ");
+			lcd_put_cur(1,0);
+			sprintf(buffer, "   %10ld   ", ADC_val);
+			lcd_send_string(buffer);
 		}
 	}
   /* USER CODE END 3 */
