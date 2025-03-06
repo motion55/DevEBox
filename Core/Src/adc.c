@@ -23,7 +23,7 @@
 /* USER CODE BEGIN 0 */
 #define	ADC_SAMPLE_SIZE 	256
 
-volatile uint16_t ADC_BUFFER[ADC_SAMPLE_SIZE*2] __attribute__((section(".DMA_Buffer_section")));
+volatile uint16_t ADC_BUFFER[ADC_SAMPLE_SIZE] __attribute__((section(".DMA_Buffer_section")));
 
 /* USER CODE END 0 */
 
@@ -119,8 +119,8 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
 
     /* ADC3 DMA Init */
     /* ADC3 Init */
-    hdma_adc3.Instance = BDMA_Channel0;
-    hdma_adc3.Init.Request = BDMA_REQUEST_ADC3;
+    hdma_adc3.Instance = DMA1_Stream0;
+    hdma_adc3.Init.Request = DMA_REQUEST_ADC3;
     hdma_adc3.Init.Direction = DMA_PERIPH_TO_MEMORY;
     hdma_adc3.Init.PeriphInc = DMA_PINC_DISABLE;
     hdma_adc3.Init.MemInc = DMA_MINC_ENABLE;
@@ -128,6 +128,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
     hdma_adc3.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
     hdma_adc3.Init.Mode = DMA_CIRCULAR;
     hdma_adc3.Init.Priority = DMA_PRIORITY_LOW;
+    hdma_adc3.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
     if (HAL_DMA_Init(&hdma_adc3) != HAL_OK)
     {
       Error_Handler();
@@ -167,7 +168,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	HAL_ADC_Stop_DMA(&hadc3);
 	conversion_count++;
-	DebugPrint("\r\n conversion_count = %d", conversion_count);
+	//DebugPrint("\r\n conversion_count = %d", conversion_count);
 }
 
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)

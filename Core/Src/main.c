@@ -18,8 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "adc.h"
-#include "bdma.h"
+#include "dma.h"
+#include "i2c.h"
 #include "memorymap.h"
 #include "quadspi.h"
 #include "usb_device.h"
@@ -53,6 +55,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -91,13 +94,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_BDMA_Init();
+  MX_DMA_Init();
   MX_QUADSPI_Init();
   MX_ADC3_Init();
-  MX_USB_DEVICE_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  MX_USB_DEVICE_Init();
 
   /* USER CODE END 2 */
+
+  /* Init scheduler */
+  osKernelInitialize();
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -105,12 +120,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
-		HAL_Delay(100);
-		DebugTask();
-		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
-		HAL_Delay(100);
-		DebugTask();
 	}
   /* USER CODE END 3 */
 }
