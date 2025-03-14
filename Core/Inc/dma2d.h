@@ -35,7 +35,7 @@ extern "C" {
 extern DMA2D_HandleTypeDef hdma2d;
 
 /* USER CODE BEGIN Private defines */
-#define	LCD_DMA2D_HANDLE	hdma2d
+
 /* USER CODE END Private defines */
 
 void MX_DMA2D_Init(void);

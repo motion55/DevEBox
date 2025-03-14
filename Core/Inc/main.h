@@ -41,6 +41,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 extern LCD_DrvTypeDef  *lcd_drv;
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
