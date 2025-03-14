@@ -218,7 +218,7 @@ void DebugMain(uint32_t val)
 	case 1:
 	{
 		DebugPrint("\r\n lcd_drv->FillRect();");
-		lcd_drv->FillRect(0, 0, lcd_drv->GetLcdPixelWidth(), lcd_drv->GetLcdPixelHeight(), 0xFFFF);
+		lcd_drv->FillRect(0, 0, lcd_drv->GetLcdPixelWidth(), lcd_drv->GetLcdPixelHeight(), 0b0000001111100000);
 	}
 		break;
 	case 2:

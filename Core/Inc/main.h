@@ -34,7 +34,6 @@ extern "C" {
 #include "spi.h"
 #include "i2c.h"
 #include "debug_console.h"
-#include "z_displ_ILI9XXX.h"
 #include "ILI9488/lcd.h"
 
 /* USER CODE END Includes */

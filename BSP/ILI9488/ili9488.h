@@ -19,7 +19,7 @@
 /* Color order
    - 0: RGB
    - 1: BGR */
-#define ILI9488_COLORMODE     1
+#define ILI9488_COLORMODE     0
 
 /* Draw and read bitdeph (16: RGB565, 24: RGB888)
    note: my SPI ILI9488 LCD can only work in 24/24 bit depth

@@ -122,7 +122,7 @@ void LCD_IO_DmaRxCpltCallback(SPI_HandleTypeDef *hspi);
 /* DMA TX/RX enable/disable
    - 0: DMA disable
    - 1: DMA enable */
-#define LCD_DMA_TX            0
+#define LCD_DMA_TX            1
 #define LCD_DMA_RX            0
 
 /* In dma mode the bitmap drawing function is completed before the actual drawing.
