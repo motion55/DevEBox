@@ -99,7 +99,7 @@ void LCD_IO_DmaRxCpltCallback(SPI_HandleTypeDef *hspi);
 #define __LCD_IO_SPI_HAL_H__
 
 /* SPI handle select (see in main.c file, default: hspi1, hspi2 ... hspi6) */
-#define LCD_SPI_HANDLE        hspi1
+#define LCD_SPI_HANDLE        hspi2
 
 /* SPI mode
    - 0: only TX (write on MOSI pin, no MISO pin)
@@ -113,7 +113,7 @@ void LCD_IO_DmaRxCpltCallback(SPI_HandleTypeDef *hspi);
 #define LCD_SPI_SPD_READ      4
 
 /* Backlight control (the logical level of the active state) */
-#define LCD_BLON              0
+#define LCD_BLON              1
 
 /* When data direction change (OUT->IN) there is a display that requires extra clock
    example ST7735: 1, ILI9341: 0, ILI9488: 0 */

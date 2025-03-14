@@ -41,7 +41,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern LCD_DrvTypeDef  *lcd_drv;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -58,6 +58,7 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+void DebugMain(uint32_t val);
 
 /* USER CODE END EFP */
 
@@ -87,11 +88,11 @@ void Error_Handler(void);
 #define	DISPL_DC_GPIO_Port	LCD_RS_GPIO_Port
 #define	DISPL_DC_Pin      	LCD_RS_Pin
 
-#ifdef TFT_NCS_GPIO_Port
-#define	DISPL_CS_GPIO_Port	TFT_NCS_GPIO_Port
+#ifdef LCD_CS_GPIO_Port
+#define	DISPL_CS_GPIO_Port	LCD_CS_GPIO_Port
 #endif
-#ifdef TFT_NCS_Pin
-#define	DISPL_CS_Pin    	TFT_NCS_Pin
+#ifdef LCD_CS_Pin
+#define	DISPL_CS_Pin    	LCD_CS_Pin
 #endif
 
 #define	DISPL_LED_GPIO_Port	LCD_BL_GPIO_Port

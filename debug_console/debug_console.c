@@ -168,13 +168,11 @@ void debug_parse(char *cmd_line)
 		break;
 	case 'B':
 	{
-		DebugPrint("\r\n Displ_Init(0);");
-		Displ_Init(0);
 	}
 		break;
 	case 'C':  // compare
-		DebugPrint("\r\n Displ_CLS(RED);");
-		Displ_CLS(RED);
+	{
+	}
 		break;
 	case 'D':  // dump
 		next_line = cmd_line;
@@ -513,12 +511,12 @@ void debug_parse(char *cmd_line)
 	case 'Z':
 		if (sscanf(cmd_line,"%li %li",&temp1,&temp2)==2)
 		{
-			//DebugMotor(temp1);
+			DebugMain(temp1);
 		}
 		else
 		if (sscanf(cmd_line,"%li",&temp1)==1)
 		{
-			//DebugMotor(temp1);
+			DebugMain(temp1);
 		}
 		else
 		{

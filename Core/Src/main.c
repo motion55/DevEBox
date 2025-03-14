@@ -113,8 +113,7 @@ int main(void)
   MX_SPI2_Init();
   MX_DMA2D_Init();
   /* USER CODE BEGIN 2 */
-  //lcd_init();
-  Displ_Init(0);
+  lcd_drv->Init();
 
   /* USER CODE END 2 */
 
@@ -207,6 +206,40 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void DebugMain(uint32_t val)
+{
+	switch (val) {
+	case 0:
+	{
+		DebugPrint("\r\n lcd_drv->Init();");
+		lcd_drv->Init();
+	}
+		break;
+	case 1:
+	{
+		DebugPrint("\r\n lcd_drv->FillRect();");
+		lcd_drv->FillRect(0, 0, lcd_drv->GetLcdPixelWidth(), lcd_drv->GetLcdPixelHeight(), 0xFFFF);
+	}
+		break;
+	case 2:
+	{
+		DebugPrint("\r\n ReadID() = %08lX", lcd_drv->ReadID());
+	}
+		break;
+	case 3:
+	{
+		DebugPrint("\r\n lcd_drv->DisplayOn();");
+		lcd_drv->DisplayOn();
+	}
+		break;
+	case 4:
+	{
+		DebugPrint("\r\n lcd_drv->DisplayOff();");
+		lcd_drv->DisplayOff();
+	}
+		break;
+	}
+}
 
 /* USER CODE END 4 */
 
