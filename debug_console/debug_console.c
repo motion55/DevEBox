@@ -167,8 +167,14 @@ void debug_parse(char *cmd_line)
 	}
 		break;
 	case 'B':
+	{
+		DebugPrint("\r\n Displ_Init(0);");
+		Displ_Init(0);
+	}
 		break;
 	case 'C':  // compare
+		DebugPrint("\r\n Displ_CLS(RED);");
+		Displ_CLS(RED);
 		break;
 	case 'D':  // dump
 		next_line = cmd_line;

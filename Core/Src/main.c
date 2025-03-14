@@ -21,9 +21,12 @@
 #include "adc.h"
 #include "bdma.h"
 #include "dcmi.h"
+#include "dma.h"
+#include "dma2d.h"
 #include "i2c.h"
 #include "memorymap.h"
 #include "quadspi.h"
+#include "spi.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
@@ -100,14 +103,18 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_BDMA_Init();
+  MX_DMA_Init();
   MX_QUADSPI_Init();
   MX_ADC3_Init();
   MX_USB_DEVICE_Init();
   MX_USART1_UART_Init();
   MX_I2C2_Init();
   MX_DCMI_Init();
+  MX_SPI2_Init();
+  MX_DMA2D_Init();
   /* USER CODE BEGIN 2 */
-  lcd_init();
+  //lcd_init();
+  Displ_Init(0);
 
   /* USER CODE END 2 */
 
@@ -129,11 +136,11 @@ int main(void)
 			char buffer[32];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
 			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
-			lcd_put_cur(0,0);
-			lcd_send_string("    ADC_Val     ");
-			lcd_put_cur(1,0);
-			sprintf(buffer, "   %10ld   ", ADC_val);
-			lcd_send_string(buffer);
+			//lcd_put_cur(0,0);
+			//lcd_send_string("    ADC_Val     ");
+			//lcd_put_cur(1,0);
+			//sprintf(buffer, "   %10ld   ", ADC_val);
+			//lcd_send_string(buffer);
 		}
 	}
   /* USER CODE END 3 */
@@ -168,7 +175,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 5;
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 16;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -195,6 +202,8 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL1_DIVQ);
+  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLL1QCLK, RCC_MCODIV_2);
 }
 
 /* USER CODE BEGIN 4 */

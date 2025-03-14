@@ -169,7 +169,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	HAL_ADC_Stop_DMA(&hadc3);
 	conversion_count++;
-	DebugPrint("\r\n conversion_count = %d", conversion_count);
+	//DebugPrint("\r\n conversion_count = %d", conversion_count);
 }
 
 void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc)
