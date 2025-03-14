@@ -113,7 +113,9 @@ int main(void)
   MX_SPI2_Init();
   MX_DMA2D_Init();
   /* USER CODE BEGIN 2 */
-  lcd_drv->Init();
+  BSP_LCD_Init();
+  BSP_LCD_DisplayOn();
+  //lcd_drv->DisplayOn();
 
   /* USER CODE END 2 */
 
@@ -132,14 +134,21 @@ int main(void)
 		uint32_t ADC_val = CalcTemperature();
 		if (ADC_val>0)
 		{
-			char buffer[32];
+			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
 			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
-			//lcd_put_cur(0,0);
-			//lcd_send_string("    ADC_Val     ");
-			//lcd_put_cur(1,0);
-			//sprintf(buffer, "   %10ld   ", ADC_val);
-			//lcd_send_string(buffer);
+#if 1
+			uint8_t *header = (uint8_t*)"      ADC_Val     ";
+			BSP_LCD_DisplayStringAtLine(2, header);
+			sprintf(buffer, "   %10ld   ", ADC_val);
+			BSP_LCD_DisplayStringAtLine(4, (uint8_t*)buffer);
+#else
+			lcd_put_cur(0,0);
+			lcd_send_string("    ADC_Val     ");
+			lcd_put_cur(1,0);
+			sprintf(buffer, "   %10ld   ", ADC_val);
+			lcd_send_string(buffer);
+#endif
 		}
 	}
   /* USER CODE END 3 */
@@ -211,31 +220,31 @@ void DebugMain(uint32_t val)
 	switch (val) {
 	case 0:
 	{
-		DebugPrint("\r\n lcd_drv->Init();");
-		lcd_drv->Init();
+		DebugPrint("\r\n BSP_LCD_Init();");
+		BSP_LCD_Init();
 	}
 		break;
 	case 1:
 	{
-		DebugPrint("\r\n lcd_drv->FillRect();");
-		lcd_drv->FillRect(0, 0, lcd_drv->GetLcdPixelWidth(), lcd_drv->GetLcdPixelHeight(), 0b0000001111100000);
+		DebugPrint("\r\n BSP_LCD_Clear(LCD_COLOR_YELLOW);");
+		BSP_LCD_Clear(LCD_COLOR_YELLOW);
 	}
 		break;
 	case 2:
 	{
-		DebugPrint("\r\n ReadID() = %08lX", lcd_drv->ReadID());
+		//DebugPrint("\r\n ReadID() = %08lX", lcd_drv->ReadID());
 	}
 		break;
 	case 3:
 	{
-		DebugPrint("\r\n lcd_drv->DisplayOn();");
-		lcd_drv->DisplayOn();
+		DebugPrint("\r\n BSP_LCD_DisplayOn();");
+		BSP_LCD_DisplayOn();
 	}
 		break;
 	case 4:
 	{
 		DebugPrint("\r\n lcd_drv->DisplayOff();");
-		lcd_drv->DisplayOff();
+		BSP_LCD_DisplayOff();
 	}
 		break;
 	}

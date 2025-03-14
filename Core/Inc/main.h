@@ -34,13 +34,13 @@ extern "C" {
 #include "spi.h"
 #include "i2c.h"
 #include "debug_console.h"
-#include "ILI9488/lcd.h"
+#include "stm32_adafruit_lcd.h"
 
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-extern LCD_DrvTypeDef  *lcd_drv;
+//extern LCD_DrvTypeDef  *lcd_drv;
 
 /* USER CODE END ET */
 
