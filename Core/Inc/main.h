@@ -98,6 +98,8 @@ void DebugMain(uint32_t val);
 #define	DISPL_LED_GPIO_Port	LCD_BL_GPIO_Port
 #define	DISPL_LED_Pin		LCD_BL_Pin
 
+#define	CAMERA_RESET_GPIO_Port	DCMI_RESET_GPIO_Port
+#define	CAMERA_RESET_Pin		DCMI_RESET_Pin
 
 /* USER CODE END Private defines */
 
