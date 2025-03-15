@@ -6,7 +6,6 @@
  */
 #include <stdio.h>
 #include "main.h"
-//#include "stm32f4xx_hal.h"
 #include "common.h"
 #include "ov7670.h"
 #include "ov7670Config.h"

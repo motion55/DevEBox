@@ -37,7 +37,7 @@ extern I2C_HandleTypeDef hi2c1;
 extern I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN Private defines */
-#define	hi2c_lcd	hi2c1
+#define	hi2c_lcd    	hi2c1
 #define	hi2c_as7265x	hi2c2
 
 /* USER CODE END Private defines */

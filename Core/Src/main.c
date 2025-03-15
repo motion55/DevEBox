@@ -39,6 +39,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#define	_USE_TFT_	0
 
 /* USER CODE END PTD */
 
@@ -122,10 +123,12 @@ int main(void)
   MX_DMA2D_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+#if	_USE_TFT_
   BSP_LCD_Init();
   BSP_LCD_DisplayOn();
-  //lcd_drv->DisplayOn();
-
+#else
+  lcd_init();
+#endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -146,7 +149,7 @@ int main(void)
 			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
 			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
-#if 1
+#if	_USE_TFT_
 			uint8_t *header = (uint8_t*)"      ADC_Val     ";
 			BSP_LCD_DisplayStringAtLine(2, header);
 			sprintf(buffer, "   %10ld   ", ADC_val);
@@ -192,7 +195,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 5;
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 16;
+  RCC_OscInitStruct.PLL.PLLQ = 19;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -229,31 +232,22 @@ void DebugMain(uint32_t val)
 	switch (val) {
 	case 0:
 	{
-		DebugPrint("\r\n BSP_LCD_Init();");
-		BSP_LCD_Init();
 	}
 		break;
 	case 1:
 	{
-		DebugPrint("\r\n BSP_LCD_Clear(LCD_COLOR_YELLOW);");
-		BSP_LCD_Clear(LCD_COLOR_YELLOW);
 	}
 		break;
 	case 2:
 	{
-		//DebugPrint("\r\n ReadID() = %08lX", lcd_drv->ReadID());
 	}
 		break;
 	case 3:
 	{
-		DebugPrint("\r\n BSP_LCD_DisplayOn();");
-		BSP_LCD_DisplayOn();
 	}
 		break;
 	case 4:
 	{
-		DebugPrint("\r\n lcd_drv->DisplayOff();");
-		BSP_LCD_DisplayOff();
 	}
 		break;
 	}
