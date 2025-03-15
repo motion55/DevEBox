@@ -32,13 +32,17 @@ extern "C" {
 
 /* USER CODE END Includes */
 
+extern I2C_HandleTypeDef hi2c1;
+
 extern I2C_HandleTypeDef hi2c2;
 
 /* USER CODE BEGIN Private defines */
-#define	hi2c_lcd	hi2c2
+#define	hi2c_lcd	hi2c1
+#define	hi2c_as7265x	hi2c2
 
 /* USER CODE END Private defines */
 
+void MX_I2C1_Init(void);
 void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */

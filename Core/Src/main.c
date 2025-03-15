@@ -120,6 +120,7 @@ int main(void)
   MX_DCMI_Init();
   MX_SPI2_Init();
   MX_DMA2D_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   BSP_LCD_Init();
   BSP_LCD_DisplayOn();
