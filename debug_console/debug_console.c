@@ -167,8 +167,12 @@ void debug_parse(char *cmd_line)
 	}
 		break;
 	case 'B':
+	{
+	}
 		break;
 	case 'C':  // compare
+	{
+	}
 		break;
 	case 'D':  // dump
 		next_line = cmd_line;
@@ -507,12 +511,12 @@ void debug_parse(char *cmd_line)
 	case 'Z':
 		if (sscanf(cmd_line,"%li %li",&temp1,&temp2)==2)
 		{
-			//DebugMotor(temp1);
+			DebugMain(temp1);
 		}
 		else
 		if (sscanf(cmd_line,"%li",&temp1)==1)
 		{
-			//DebugMotor(temp1);
+			DebugMain(temp1);
 		}
 		else
 		{

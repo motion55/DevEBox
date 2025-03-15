@@ -2,7 +2,7 @@
 /** Put this in the src folder **/
 
 #include "i2c-lcd.h"
-extern I2C_HandleTypeDef hi2c1;  // change your handler here accordingly
+extern I2C_HandleTypeDef hi2c_lcd;  // change your handler here accordingly
 
 #define SLAVE_ADDRESS_LCD 0x4E // change this according to ur setup
 
@@ -16,7 +16,7 @@ void lcd_send_cmd (char cmd)
 	data_t[1] = data_u|0x08;  //en=0, rs=0 -> bxxxx1000
 	data_t[2] = data_l|0x0C;  //en=1, rs=0 -> bxxxx1100
 	data_t[3] = data_l|0x08;  //en=0, rs=0 -> bxxxx1000
-	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
+	HAL_I2C_Master_Transmit (&hi2c_lcd, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
 }
 
 void lcd_send_data (char data)
@@ -29,7 +29,7 @@ void lcd_send_data (char data)
 	data_t[1] = data_u|0x09;  //en=0, rs=0 -> bxxxx1001
 	data_t[2] = data_l|0x0D;  //en=1, rs=0 -> bxxxx1101
 	data_t[3] = data_l|0x09;  //en=0, rs=0 -> bxxxx1001
-	HAL_I2C_Master_Transmit (&hi2c1, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
+	HAL_I2C_Master_Transmit (&hi2c_lcd, SLAVE_ADDRESS_LCD,(uint8_t *) data_t, 4, 100);
 }
 
 void lcd_clear (void)

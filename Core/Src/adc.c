@@ -21,6 +21,8 @@
 #include "adc.h"
 
 /* USER CODE BEGIN 0 */
+#include "main.h"
+
 #define	ADC_SAMPLE_SIZE 	256
 
 volatile uint16_t ADC_BUFFER[ADC_SAMPLE_SIZE] __attribute__((section(".DMA_Buffer_section")));

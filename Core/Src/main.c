@@ -18,23 +18,28 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
 #include "adc.h"
+#include "bdma.h"
+#include "dcmi.h"
 #include "dma.h"
+#include "dma2d.h"
 #include "i2c.h"
 #include "memorymap.h"
 #include "quadspi.h"
+#include "spi.h"
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "i2c-lcd.h"
 #include "debug_console.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+#define	_USE_TFT_	0
 
 /* USER CODE END PTD */
 
@@ -56,7 +61,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void MX_FREERTOS_Init(void);
+static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -77,6 +82,17 @@ int main(void)
 
   /* USER CODE END 1 */
 
+  /* MPU Configuration--------------------------------------------------------*/
+  MPU_Config();
+
+  /* Enable the CPU Cache */
+
+  /* Enable I-Cache---------------------------------------------------------*/
+  SCB_EnableICache();
+
+  /* Enable D-Cache---------------------------------------------------------*/
+  SCB_EnableDCache();
+
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -95,26 +111,25 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_BDMA_Init();
   MX_DMA_Init();
   MX_QUADSPI_Init();
   MX_ADC3_Init();
   MX_USB_DEVICE_Init();
   MX_USART1_UART_Init();
+  MX_I2C2_Init();
+  MX_DCMI_Init();
+  MX_SPI2_Init();
+  MX_DMA2D_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
-  MX_USB_DEVICE_Init();
-
+#if	_USE_TFT_
+  BSP_LCD_Init();
+  BSP_LCD_DisplayOn();
+#else
+  lcd_init();
+#endif
   /* USER CODE END 2 */
-
-  /* Init scheduler */
-  osKernelInitialize();
-
-  /* Call init function for freertos objects (in cmsis_os2.c) */
-  MX_FREERTOS_Init();
-
-  /* Start scheduler */
-  osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -131,9 +146,21 @@ int main(void)
 		uint32_t ADC_val = CalcTemperature();
 		if (ADC_val>0)
 		{
-			char buffer[32];
+			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
 			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
+#if	_USE_TFT_
+			uint8_t *header = (uint8_t*)"      ADC_Val     ";
+			BSP_LCD_DisplayStringAtLine(2, header);
+			sprintf(buffer, "   %10ld   ", ADC_val);
+			BSP_LCD_DisplayStringAtLine(4, (uint8_t*)buffer);
+#else
+			lcd_put_cur(0,0);
+			lcd_send_string("    ADC_Val     ");
+			lcd_put_cur(1,0);
+			sprintf(buffer, "   %10ld   ", ADC_val);
+			lcd_send_string(buffer);
+#endif
 		}
 	}
   /* USER CODE END 3 */
@@ -168,7 +195,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 5;
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 2;
+  RCC_OscInitStruct.PLL.PLLQ = 19;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -195,9 +222,36 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+  __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL1_DIVQ);
+  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLL1QCLK, RCC_MCODIV_2);
 }
 
 /* USER CODE BEGIN 4 */
+void DebugMain(uint32_t val)
+{
+	switch (val) {
+	case 0:
+	{
+	}
+		break;
+	case 1:
+	{
+	}
+		break;
+	case 2:
+	{
+	}
+		break;
+	case 3:
+	{
+	}
+		break;
+	case 4:
+	{
+	}
+		break;
+	}
+}
 
 /* USER CODE END 4 */
 
@@ -223,6 +277,15 @@ void MPU_Config(void)
   MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
   MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
   MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
+
+  /** Initializes and configures the Region and the memory to be protected
+  */
+  MPU_InitStruct.Number = MPU_REGION_NUMBER1;
+  MPU_InitStruct.BaseAddress = 0x30000000;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_512KB;
+  MPU_InitStruct.AccessPermission = MPU_REGION_NO_ACCESS;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
   /* Enables the MPU */
