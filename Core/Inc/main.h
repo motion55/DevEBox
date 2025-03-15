@@ -73,10 +73,6 @@ void DebugMain(uint32_t val);
 #define LCD_BL_GPIO_Port GPIOB
 #define LCD_RS_Pin GPIO_PIN_1
 #define LCD_RS_GPIO_Port GPIOB
-#define AS7265X_SCL_Pin GPIO_PIN_10
-#define AS7265X_SCL_GPIO_Port GPIOB
-#define AS7265X_SDA_Pin GPIO_PIN_11
-#define AS7265X_SDA_GPIO_Port GPIOB
 #define LCD_CS_Pin GPIO_PIN_12
 #define LCD_CS_GPIO_Port GPIOB
 #define LCD_SCK_Pin GPIO_PIN_13

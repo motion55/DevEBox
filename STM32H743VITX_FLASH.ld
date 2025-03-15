@@ -166,6 +166,12 @@ SECTIONS
     . = ALIGN(8);
   } >RAM_D1
 
+  .CAM_Buffer_section :
+  {
+    . = ALIGN(32);
+    *(.CAMBufferSection) 
+  } >RAM_D2
+  
   .DMA_Buffer_section :
   {
     . = ALIGN(32);
