@@ -30,6 +30,7 @@
 #include "usart.h"
 #include "usb_device.h"
 #include "gpio.h"
+#include "fmc.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -122,6 +123,8 @@ int main(void)
   MX_SPI2_Init();
   MX_DMA2D_Init();
   MX_I2C1_Init();
+  MX_FMC_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 #if	_USE_TFT_
   BSP_LCD_Init();

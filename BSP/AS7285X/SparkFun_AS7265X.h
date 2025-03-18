@@ -113,7 +113,7 @@ class AS7265X
 public:
   AS7265X();
 
-  boolean begin(I2C_HandleTypeDef &hi2c);
+  boolean begin(I2C_HandleTypeDef *hi2c);
   boolean isConnected(); //Checks if sensor ack's the I2C request
 
   uint8_t getDeviceType();

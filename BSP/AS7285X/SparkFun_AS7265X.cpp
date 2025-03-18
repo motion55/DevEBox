@@ -34,9 +34,9 @@ AS7265X::AS7265X()
 
 //Initializes the sensor with basic settings
 //Returns false if sensor is not detected
-boolean AS7265X::begin(I2C_HandleTypeDef &hi2c)
+boolean AS7265X::begin(I2C_HandleTypeDef *hi2c)
 {
-	_hi2c = &hi2c;
+	_hi2c = hi2c;
 
 	if (isConnected() == false)
 		return (false); //Check for sensor presence

@@ -10,6 +10,8 @@
 #include "ov7670.h"
 #include "ov7670Config.h"
 #include "ov7670Reg.h"
+#include "dcmi.h"
+#include "i2c.h"
 
 /*** Internal Const Values, Macros ***/
 #define OV7670_QVGA_WIDTH  320
@@ -17,9 +19,9 @@
 
 
 /*** Internal Static Variables ***/
-static DCMI_HandleTypeDef *sp_hdcmi;
-static DMA_HandleTypeDef  *sp_hdma_dcmi;
-static I2C_HandleTypeDef  *sp_hi2c;
+static DCMI_HandleTypeDef *sp_hdcmi = &hdcmi;
+static DMA_HandleTypeDef  *sp_hdma_dcmi = &hdma_dcmi;
+static I2C_HandleTypeDef  *sp_hi2c = &hi2c_dcmi;
 static uint32_t    s_destAddressForContiuousMode;
 static void (* s_cbHsync)(uint32_t h);
 static void (* s_cbVsync)(uint32_t v);
@@ -27,8 +29,8 @@ static uint32_t s_currentH;
 static uint32_t s_currentV;
 
 /*** Internal Function Declarations ***/
-static RET ov7670_write(uint8_t regAddr, uint8_t data);
-static RET ov7670_read(uint8_t regAddr, uint8_t *data);
+HAL_StatusTypeDef ov7670_write(uint8_t regAddr, uint8_t data);
+HAL_StatusTypeDef ov7670_read(uint8_t regAddr, uint8_t *data);
 
 /*** External Function Defines ***/
 RET ov7670_init(DCMI_HandleTypeDef *p_hdcmi, DMA_HandleTypeDef *p_hdma_dcmi, I2C_HandleTypeDef *p_hi2c)
@@ -39,6 +41,7 @@ RET ov7670_init(DCMI_HandleTypeDef *p_hdcmi, DMA_HandleTypeDef *p_hdma_dcmi, I2C
   s_destAddressForContiuousMode = 0;
 
   HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(DCMI_PWDN_GPIO_Port, DCMI_PWDN_Pin, GPIO_PIN_RESET);	//UN-PWDN!
   HAL_Delay(100);
   HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_SET);
   HAL_Delay(100);
@@ -46,10 +49,10 @@ RET ov7670_init(DCMI_HandleTypeDef *p_hdcmi, DMA_HandleTypeDef *p_hdma_dcmi, I2C
   ov7670_write(0x12, 0x80);  // RESET
   HAL_Delay(30);
 
-  uint8_t buffer[4];
-  ov7670_read(0x0b, buffer);
-  printf("[OV7670] dev id = %02X\n", buffer[0]);
+  uint8_t dev_id[4] = {0};
+  ov7670_read(0x0b, dev_id);
 
+  DebugPrint("\r\n dev_id = %02X", dev_id[0]);
 
   return RET_OK;
 }
@@ -119,18 +122,18 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 //}
 
 /*** Internal Function Defines ***/
-static RET ov7670_write(uint8_t regAddr, uint8_t data)
+HAL_StatusTypeDef ov7670_write(uint8_t regAddr, uint8_t data)
 {
-  HAL_StatusTypeDef ret;
+  HAL_StatusTypeDef ret = 0;
   do {
     ret = HAL_I2C_Mem_Write(sp_hi2c, SLAVE_ADDR, regAddr, I2C_MEMADD_SIZE_8BIT, &data, 1, 100);
   } while (ret != HAL_OK && 0);
   return ret;
 }
 
-static RET ov7670_read(uint8_t regAddr, uint8_t *data)
+HAL_StatusTypeDef ov7670_read(uint8_t regAddr, uint8_t *data)
 {
-  HAL_StatusTypeDef ret;
+  HAL_StatusTypeDef ret = 0;
   do {
     // HAL_I2C_Mem_Read doesn't work (because of SCCB protocol(doesn't have ack))? */
 //    ret = HAL_I2C_Mem_Read(sp_hi2c, SLAVE_ADDR, regAddr, I2C_MEMADD_SIZE_8BIT, data, 1, 1000);
