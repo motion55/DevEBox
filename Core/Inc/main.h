@@ -65,8 +65,8 @@ void DebugMain(uint32_t val);
 /* Private defines -----------------------------------------------------------*/
 #define LED2_Pin GPIO_PIN_1
 #define LED2_GPIO_Port GPIOA
-#define DCMI_PWRDN_Pin GPIO_PIN_7
-#define DCMI_PWRDN_GPIO_Port GPIOA
+#define DCMI_PWDN_Pin GPIO_PIN_7
+#define DCMI_PWDN_GPIO_Port GPIOA
 #define DCMI_RESET_Pin GPIO_PIN_4
 #define DCMI_RESET_GPIO_Port GPIOC
 #define LCD_BL_Pin GPIO_PIN_0
@@ -104,6 +104,9 @@ void DebugMain(uint32_t val);
 
 #define	CAMERA_RESET_GPIO_Port	DCMI_RESET_GPIO_Port
 #define	CAMERA_RESET_Pin		DCMI_RESET_Pin
+
+#define CAMERA_PWDN_GPIO_Port 	DCMI_PWDN_GPIO_Port
+#define CAMERA_PWDN_Pin     	DCMI_PWDN_Pin
 
 /* USER CODE END Private defines */
 

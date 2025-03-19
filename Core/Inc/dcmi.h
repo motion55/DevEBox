@@ -35,6 +35,7 @@ extern "C" {
 extern DCMI_HandleTypeDef hdcmi;
 
 /* USER CODE BEGIN Private defines */
+extern DMA_HandleTypeDef hdma_dcmi;
 
 /* USER CODE END Private defines */
 
