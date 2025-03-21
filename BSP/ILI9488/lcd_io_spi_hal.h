@@ -105,7 +105,7 @@ void LCD_IO_DmaRxCpltCallback(SPI_HandleTypeDef *hspi);
    - 0: only TX (write on MOSI pin, no MISO pin)
    - 1: half duplex (MOSI pin is bidirectional)
    - 2: full duplex (write on MOSI pin, read on MISO pin) */
-#define LCD_SPI_MODE          2
+#define LCD_SPI_MODE          0
 
 /* SPI write and read speed (if deleted -> setting in CUBE)
    - hardware SPI clock div fPCLK: 0=/2, 1=/4, 2=/8, 3=/16, 4=/32, 5=/64, 6=/128, 7=/256 */

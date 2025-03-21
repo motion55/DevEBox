@@ -14,8 +14,8 @@
 #include "i2c.h"
 
 /*** Internal Const Values, Macros ***/
-#define OV7670_QVGA_WIDTH  320
-#define OV7670_QVGA_HEIGHT 240
+#define OV7670_QVGA_WIDTH  640
+#define OV7670_QVGA_HEIGHT 480
 
 
 /*** Internal Static Variables ***/
@@ -41,7 +41,7 @@ RET ov7670_init(DCMI_HandleTypeDef *p_hdcmi, DMA_HandleTypeDef *p_hdma_dcmi, I2C
   s_destAddressForContiuousMode = 0;
 
   HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(CAMERA_PWDN_GPIO_Port, CAMERA_PWDN_Pin, GPIO_PIN_RESET);	//UN-PWDN!
+  HAL_GPIO_WritePin(DCMI_PWDN_GPIO_Port, DCMI_PWDN_Pin, GPIO_PIN_RESET);	//UN-PWDN!
   HAL_Delay(100);
   HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_SET);
   HAL_Delay(100);

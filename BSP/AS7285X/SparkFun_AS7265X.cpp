@@ -30,6 +30,7 @@
 //Constructor
 AS7265X::AS7265X()
 {
+	_hi2c = NULL;
 }
 
 //Initializes the sensor with basic settings
@@ -603,6 +604,9 @@ void AS7265X::virtualWriteRegister(uint8_t virtualAddr, uint8_t dataToWrite)
 //Reads from a give location from the AS726x
 uint8_t AS7265X::readRegister(uint8_t addr)
 {
+	if (_hi2c==NULL)
+		return 0;
+
 	uint8_t data;
 
 	HAL_StatusTypeDef ret = HAL_I2C_Master_Transmit(_hi2c, AS7265X_ADDR, &addr, 1, 100);
@@ -618,6 +622,9 @@ uint8_t AS7265X::readRegister(uint8_t addr)
 //Write a value to a spot in the AS726x
 boolean AS7265X::writeRegister(uint8_t addr, uint8_t val)
 {
+	if (_hi2c==NULL)
+		return (false);
+
 	HAL_StatusTypeDef ret = HAL_I2C_Master_Transmit(_hi2c, AS7265X_ADDR, &addr, 1, 100);
 	if (ret == HAL_OK) {
 		ret = HAL_I2C_Master_Transmit(_hi2c, AS7265X_ADDR, &val, 1, 100);
