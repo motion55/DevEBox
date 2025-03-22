@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "adc.h"
 #include "bdma.h"
 #include "dcmi.h"
@@ -63,6 +64,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MPU_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -116,7 +118,6 @@ int main(void)
   MX_DMA_Init();
   MX_QUADSPI_Init();
   MX_ADC3_Init();
-  MX_USB_DEVICE_Init();
   MX_USART1_UART_Init();
   MX_I2C2_Init();
   MX_DCMI_Init();
@@ -133,6 +134,14 @@ int main(void)
   lcd_init();
 #endif
   /* USER CODE END 2 */
+
+  /* Call init function for freertos objects (in cmsis_os2.c) */
+  MX_FREERTOS_Init();
+
+  /* Start scheduler */
+  osKernelStart();
+
+  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
