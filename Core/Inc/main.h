@@ -63,6 +63,14 @@ void DebugMain(uint32_t val);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define PUSH_BUTTON1_Pin GPIO_PIN_0
+#define PUSH_BUTTON1_GPIO_Port GPIOC
+#define PUSH_BUTTON2_Pin GPIO_PIN_2
+#define PUSH_BUTTON2_GPIO_Port GPIOC
+#define PUSH_BUTTON3_Pin GPIO_PIN_3
+#define PUSH_BUTTON3_GPIO_Port GPIOC
+#define PUSH_BUTTON4_Pin GPIO_PIN_0
+#define PUSH_BUTTON4_GPIO_Port GPIOA
 #define LED2_Pin GPIO_PIN_1
 #define LED2_GPIO_Port GPIOA
 #define DCMI_PWDN_Pin GPIO_PIN_7

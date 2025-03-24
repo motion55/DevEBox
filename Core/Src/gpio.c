@@ -47,8 +47,8 @@ void MX_GPIO_Init(void)
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
@@ -63,6 +63,18 @@ void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, TFT_BL_Pin|TFT_RS_Pin|TFT_CS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : PUSH_BUTTON1_Pin PUSH_BUTTON2_Pin PUSH_BUTTON3_Pin */
+  GPIO_InitStruct.Pin = PUSH_BUTTON1_Pin|PUSH_BUTTON2_Pin|PUSH_BUTTON3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PUSH_BUTTON4_Pin */
+  GPIO_InitStruct.Pin = PUSH_BUTTON4_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(PUSH_BUTTON4_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED2_Pin DCMI_PWDN_Pin */
   GPIO_InitStruct.Pin = LED2_Pin|DCMI_PWDN_Pin;

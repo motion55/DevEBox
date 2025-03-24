@@ -125,6 +125,7 @@ int main(void)
   MX_I2C1_Init();
   MX_FMC_Init();
   MX_USART2_UART_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 #if	_USE_TFT_
   BSP_LCD_Init();
