@@ -63,6 +63,10 @@ void DebugMain(uint32_t val);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TFT_INT_Pin GPIO_PIN_3
+#define TFT_INT_GPIO_Port GPIOE
+#define NRESET_Pin GPIO_PIN_13
+#define NRESET_GPIO_Port GPIOC
 #define PUSH_BUTTON1_Pin GPIO_PIN_0
 #define PUSH_BUTTON1_GPIO_Port GPIOC
 #define PUSH_BUTTON2_Pin GPIO_PIN_2
@@ -73,10 +77,16 @@ void DebugMain(uint32_t val);
 #define PUSH_BUTTON4_GPIO_Port GPIOA
 #define LED2_Pin GPIO_PIN_1
 #define LED2_GPIO_Port GPIOA
+#define SERVO_OUT2_Pin GPIO_PIN_3
+#define SERVO_OUT2_GPIO_Port GPIOA
+#define SERVO_OUT1_Pin GPIO_PIN_5
+#define SERVO_OUT1_GPIO_Port GPIOA
 #define DCMI_PWDN_Pin GPIO_PIN_7
 #define DCMI_PWDN_GPIO_Port GPIOA
-#define DCMI_RESET_Pin GPIO_PIN_4
-#define DCMI_RESET_GPIO_Port GPIOC
+#define ADC_INP_Pin GPIO_PIN_4
+#define ADC_INP_GPIO_Port GPIOC
+#define ADC_INN_Pin GPIO_PIN_5
+#define ADC_INN_GPIO_Port GPIOC
 #define TFT_BL_Pin GPIO_PIN_0
 #define TFT_BL_GPIO_Port GPIOB
 #define TFT_RS_Pin GPIO_PIN_1
@@ -119,18 +129,30 @@ void DebugMain(uint32_t val);
 #define FMC_D0_GPIO_Port GPIOD
 #define FMC_D1_Pin GPIO_PIN_15
 #define FMC_D1_GPIO_Port GPIOD
+#define FAN_OUT_Pin GPIO_PIN_8
+#define FAN_OUT_GPIO_Port GPIOC
 #define DCMI_XCLK_Pin GPIO_PIN_8
 #define DCMI_XCLK_GPIO_Port GPIOA
+#define SPI1_NCS_Pin GPIO_PIN_15
+#define SPI1_NCS_GPIO_Port GPIOA
 #define FMC_D2_Pin GPIO_PIN_0
 #define FMC_D2_GPIO_Port GPIOD
 #define FMC_D3_Pin GPIO_PIN_1
 #define FMC_D3_GPIO_Port GPIOD
+#define TFT_TE_Pin GPIO_PIN_2
+#define TFT_TE_GPIO_Port GPIOD
 #define FMC_NRD_Pin GPIO_PIN_4
 #define FMC_NRD_GPIO_Port GPIOD
 #define FMC_NWR_Pin GPIO_PIN_5
 #define FMC_NWR_GPIO_Port GPIOD
 #define FMC_NCS_Pin GPIO_PIN_7
 #define FMC_NCS_GPIO_Port GPIOD
+#define SPI1_SCK_Pin GPIO_PIN_3
+#define SPI1_SCK_GPIO_Port GPIOB
+#define SPI1_MISO_Pin GPIO_PIN_4
+#define SPI1_MISO_GPIO_Port GPIOB
+#define SPI1_MOSI_Pin GPIO_PIN_5
+#define SPI1_MOSI_GPIO_Port GPIOB
 #define LCD_SCL_Pin GPIO_PIN_8
 #define LCD_SCL_GPIO_Port GPIOB
 #define LCD_SDA_Pin GPIO_PIN_9
