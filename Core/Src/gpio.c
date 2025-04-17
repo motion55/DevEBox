@@ -53,10 +53,10 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(NRESET_GPIO_Port, NRESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(NRESET_OUT_GPIO_Port, NRESET_OUT_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(DCMI_PWDN_GPIO_Port, DCMI_PWDN_Pin, GPIO_PIN_RESET);
@@ -70,12 +70,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(TFT_INT_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : NRESET_Pin */
-  GPIO_InitStruct.Pin = NRESET_Pin;
+  /*Configure GPIO pin : NRESET_OUT_Pin */
+  GPIO_InitStruct.Pin = NRESET_OUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(NRESET_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(NRESET_OUT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PUSH_BUTTON1_Pin PUSH_BUTTON2_Pin PUSH_BUTTON3_Pin */
   GPIO_InitStruct.Pin = PUSH_BUTTON1_Pin|PUSH_BUTTON2_Pin|PUSH_BUTTON3_Pin;
@@ -89,8 +89,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(PUSH_BUTTON4_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : LED2_Pin DCMI_PWDN_Pin */
-  GPIO_InitStruct.Pin = LED2_Pin|DCMI_PWDN_Pin;
+  /*Configure GPIO pins : LED_Pin DCMI_PWDN_Pin */
+  GPIO_InitStruct.Pin = LED_Pin|DCMI_PWDN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -107,7 +107,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = DCMI_XCLK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(DCMI_XCLK_GPIO_Port, &GPIO_InitStruct);
 

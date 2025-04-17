@@ -22,8 +22,11 @@
 #include <string.h>
 #include "debug_console.h"
 //#include "Timer.h"
-#include "usbd_cdc_if.h"
-#include "adc.h"
+//#include "usbd_cdc_if.h"
+#ifndef __USBD_CDC_IF_H__
+#include "comm.h"
+#endif
+//#include "adc.h"
 //#include "cmsis_os.h"
 
 #ifndef EOF
@@ -97,14 +100,14 @@ unsigned int do_dump(void);
 void DebugPutChar(char ch);
 void DebugSend(char *message);
 
-#ifdef debug_data
+#ifdef huart_debug
 __attribute__((section(".DMABufferSection"))) __attribute__((aligned(32)))
 uint8_t dbg_RX_DMA_Buffer[RX_DMA_BUFFER_SIZE];
 __attribute__((section(".DMABufferSection"))) __attribute__((aligned(32)))
 uint8_t dbg_TX_DMA_Buffer[TX_DMA_BUFFER_SIZE];
 
 UART_DATA_t debug_data = {
-	.huart = &debug_huart,
+	.huart = &huart_debug,
 	.COMM_rcv = debug_rcv,
 	.RX_DMA_Buffer = dbg_RX_DMA_Buffer,
 	.TX_DMA_Buffer = dbg_TX_DMA_Buffer,
@@ -148,7 +151,7 @@ unsigned int do_dump(void)
 void debug_parse(char *cmd_line)
 {
 	int params;
-	uint32_t temp1,temp2,temp3,temp4;
+	static uint32_t temp1=0,temp2=0,temp3=0,temp4=0;
 	uint16_t tempword;
 	uint8_t tempbyte;
 	char *next_line;
@@ -162,8 +165,6 @@ void debug_parse(char *cmd_line)
 		break;
 	case 'A':  // assemble
 	{
-		uint32_t ADC_VAL = CalcTemperature();
-		DebugPrint("\r\n ADC_VAL = %10ld", ADC_VAL);
 	}
 		break;
 	case 'B':
@@ -520,6 +521,9 @@ void debug_parse(char *cmd_line)
 		}
 		else
 		{
+			_debug_dump_beg = _old_debug_dump_beg;
+			_debug_dump_end = _debug_dump_beg + 127;
+			do_dump();
 		}
 		break;
 	default:
@@ -573,19 +577,75 @@ void debug_idle(void)
 
 void DebugInit(void)
 {
+#ifdef huart_debug
+	debug_data.huart = &huart_debug;
+#ifndef	TX_BUFFER_SIZE
+	debug_data.TX_Buffer_size = DBG_TX_BUFFER_SIZE;
+	debug_data.TX_Buffer = dbg_tx_buffer;
+#endif
+	debug_data.COMM_rcv = debug_rcv;
+	debug_data.RX_DMA_Buffer_head = 0;
+	debug_data.RX_DMA_Buffer_tail = 0;
+	debug_data.TX_Buffer_head = 0;
+	debug_data.TX_Buffer_tail = 0;
+	debug_data.TX_DMA_Lock = 0;
+	if (debug_data.huart->hdmarx) {
+		HAL_UART_Receive_DMA(debug_data.huart,
+				debug_data.RX_DMA_Buffer, RX_DMA_BUFFER_SIZE);
+	}
+#endif
 	DebugPrint("\r\n  Welcome to Debug Console ver STM1.1!");
 	DebugPrint("\r\n Compile Date: %s, Time: %s",__DATE__,__TIME__);
 	SendDebugPrompt;
 }
 
-static char InDebug = 0;
+static char DebugLock = 0;
 
 #define	_USE_SOF_	0
 
 void DebugTask(void)
 {
-	if (!InDebug) {
-		InDebug = 1;	//prevent recursion
+#ifdef huart_debug
+	if (!DebugLock)
+	{
+		DebugLock = 1;	//prevent recursion
+		if (huart_debug.hdmarx==NULL)
+		{
+			uint8_t rx_char;
+			if (HAL_UART_Receive(&huart_debug, &rx_char, 1, 0)==HAL_OK)
+			{
+				debug_rcv(rx_char);
+			}
+			else
+			{
+	#if DEBUGTIMER
+				StartTimer(DEBUGTIMER, 250);
+				if (TimerOut(DEBUGTIMER))
+				{
+					ResetTimer(DEBUGTIMER);
+					debug_idle();
+				}
+	#endif
+			}
+		}
+		else
+		{
+	#if DEBUGTIMER
+			StartTimer(DEBUGTIMER, 250);
+			if (TimerOut(DEBUGTIMER))
+			{
+				ResetTimer(DEBUGTIMER);
+				debug_idle();
+			}
+	#endif
+		}
+		DebugLock = 0;
+	}
+	CommTXTask(&debug_data);
+#else
+	if (!DebugLock)
+	{
+		DebugLock = 1;	//prevent recursion
 		if (dbg_rx_head != dbg_rx_tail) {
 			do {
 				char _rxchar = dbg_rx_buffer[dbg_rx_tail++];
@@ -600,10 +660,11 @@ void DebugTask(void)
 //				debug_idle();
 //			}
 		}
-		InDebug = 0;
+		DebugLock = 0;
 	}
-#if (_USE_SOF_==0)
+	#if (_USE_SOF_==0)
 	DoDebugSerial();
+	#endif
 #endif
 }
 
@@ -613,6 +674,9 @@ volatile uint8_t USB_Lock = 0;
 
 void DebugPutChar(char ch)
 {
+#ifdef huart_debug
+	CommUARTPutChar(&debug_data, ch);
+#else
  #if _USE_SOF_
 	USB_Lock = 1;
  #endif
@@ -625,6 +689,7 @@ void DebugPutChar(char ch)
  #if _USE_SOF_
 	USB_Lock = 0;
  #endif
+#endif
 }
 
 void DebugSend(char *message)

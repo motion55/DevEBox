@@ -21,7 +21,6 @@
  extern "C" {
 #endif
 
-
 void DebugInit(void);
 
 void DebugTask(void);

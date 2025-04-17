@@ -37,11 +37,14 @@
 /* USER CODE BEGIN Includes */
 #include "i2c-lcd.h"
 #include "debug_console.h"
+#include "ov7670.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-#define	_USE_TFT_	0
+#define	_USE_TFT_	1
+#define	_USE_LCD_	1
 
 /* USER CODE END PTD */
 
@@ -64,7 +67,6 @@
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
-static void MPU_Config(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -85,16 +87,10 @@ int main(void)
 
   /* USER CODE END 1 */
 
-  /* MPU Configuration--------------------------------------------------------*/
-  MPU_Config();
-
   /* Enable the CPU Cache */
 
   /* Enable I-Cache---------------------------------------------------------*/
   SCB_EnableICache();
-
-  /* Enable D-Cache---------------------------------------------------------*/
-  SCB_EnableDCache();
 
   /* MCU Configuration--------------------------------------------------------*/
 
@@ -132,27 +128,30 @@ int main(void)
   MX_USART2_UART_Init();
   MX_SPI1_Init();
   MX_TIM2_Init();
-  MX_TIM3_Init();
   MX_ADC1_Init();
+  MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
 #if	_USE_TFT_
   BSP_LCD_Init();
   BSP_LCD_DisplayOn();
-#else
+#endif
+#if	_USE_LCD_
   lcd_init();
 #endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  DebugInit();
+
 	while (1) {
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 		HAL_Delay(100);
 		DebugTask();
-		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 		HAL_Delay(100);
 		DebugTask();
 		uint32_t ADC_val = CalcTemperature();
@@ -160,13 +159,15 @@ int main(void)
 		{
 			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
-			HAL_UART_Transmit(&huart1, (uint8_t*)buffer, strlen(buffer), 100);
+			HAL_UART_Transmit(&huart_ADC, (uint8_t*)buffer, strlen(buffer), 100);
+			//DebugSend("\r\n Hello");
 #if	_USE_TFT_
 			uint8_t *header = (uint8_t*)"      ADC_Val     ";
 			BSP_LCD_DisplayStringAtLine(2, header);
 			sprintf(buffer, "   %10ld   ", ADC_val);
 			BSP_LCD_DisplayStringAtLine(4, (uint8_t*)buffer);
-#else
+#endif
+#if	_USE_LCD_
 			lcd_put_cur(0,0);
 			lcd_send_string("    ADC_Val     ");
 			lcd_put_cur(1,0);
@@ -207,7 +208,7 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.PLL.PLLM = 5;
   RCC_OscInitStruct.PLL.PLLN = 160;
   RCC_OscInitStruct.PLL.PLLP = 2;
-  RCC_OscInitStruct.PLL.PLLQ = 19;
+  RCC_OscInitStruct.PLL.PLLQ = 20;
   RCC_OscInitStruct.PLL.PLLR = 2;
   RCC_OscInitStruct.PLL.PLLRGE = RCC_PLL1VCIRANGE_2;
   RCC_OscInitStruct.PLL.PLLVCOSEL = RCC_PLL1VCOWIDE;
@@ -234,8 +235,7 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  __HAL_RCC_PLLCLKOUT_ENABLE(RCC_PLL1_DIVQ);
-  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_PLL1QCLK, RCC_MCODIV_2);
+  HAL_RCC_MCOConfig(RCC_MCO1, RCC_MCO1SOURCE_HSE, RCC_MCODIV_5);
 }
 
 /**
@@ -270,14 +270,32 @@ void DebugMain(uint32_t val)
 	switch (val) {
 	case 0:
 	{
+		DebugPrint("\r\n OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);");
+		OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);
+		OV7670_Start();
 	}
 		break;
 	case 1:
 	{
+		uint8_t temp1, temp2;
+		if (ov7670_read(OV7670_REG_PID, &temp1)==HAL_OK)
+		{
+			ov7670_read(OV7670_REG_VER, &temp2);
+			DebugPrint("\r\n ReadID %02X %02X", temp1, temp2);
+		}
+		else
+		{
+			DebugPrint("\r\n ReadID Error!");
+		}
 	}
 		break;
 	case 2:
 	{
+		if (OV7670_isDriverBusy()) {
+			DebugPrint("\r\n OV7670_isDriver is Busy");
+		} else {
+			DebugPrint("\r\n OV7670_isDriver is NOY Busy");
+		}
 	}
 		break;
 	case 3:
@@ -292,44 +310,6 @@ void DebugMain(uint32_t val)
 }
 
 /* USER CODE END 4 */
-
- /* MPU Configuration */
-
-void MPU_Config(void)
-{
-  MPU_Region_InitTypeDef MPU_InitStruct = {0};
-
-  /* Disables the MPU */
-  HAL_MPU_Disable();
-
-  /** Initializes and configures the Region and the memory to be protected
-  */
-  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
-  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
-  MPU_InitStruct.BaseAddress = 0x38000000;
-  MPU_InitStruct.Size = MPU_REGION_SIZE_64KB;
-  MPU_InitStruct.SubRegionDisable = 0x0;
-  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
-  MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
-  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
-  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
-  MPU_InitStruct.IsCacheable = MPU_ACCESS_NOT_CACHEABLE;
-  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
-
-  HAL_MPU_ConfigRegion(&MPU_InitStruct);
-
-  /** Initializes and configures the Region and the memory to be protected
-  */
-  MPU_InitStruct.Number = MPU_REGION_NUMBER1;
-  MPU_InitStruct.BaseAddress = 0x30000000;
-  MPU_InitStruct.Size = MPU_REGION_SIZE_512KB;
-  MPU_InitStruct.AccessPermission = MPU_REGION_NO_ACCESS;
-
-  HAL_MPU_ConfigRegion(&MPU_InitStruct);
-  /* Enables the MPU */
-  HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
-
-}
 
 /**
   * @brief  Period elapsed callback in non blocking mode

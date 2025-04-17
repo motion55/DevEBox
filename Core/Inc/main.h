@@ -65,9 +65,9 @@ void DebugMain(uint32_t val);
 /* Private defines -----------------------------------------------------------*/
 #define TFT_INT_Pin GPIO_PIN_3
 #define TFT_INT_GPIO_Port GPIOE
-#define NRESET_Pin GPIO_PIN_13
-#define NRESET_GPIO_Port GPIOC
-#define PUSH_BUTTON1_Pin GPIO_PIN_0
+#define NRESET_OUT_Pin GPIO_PIN_13
+#define NRESET_OUT_GPIO_Port GPIOC
+#define PUSH_BUTTON1_Pin GPIO_PIN_1
 #define PUSH_BUTTON1_GPIO_Port GPIOC
 #define PUSH_BUTTON2_Pin GPIO_PIN_2
 #define PUSH_BUTTON2_GPIO_Port GPIOC
@@ -75,8 +75,10 @@ void DebugMain(uint32_t val);
 #define PUSH_BUTTON3_GPIO_Port GPIOC
 #define PUSH_BUTTON4_Pin GPIO_PIN_0
 #define PUSH_BUTTON4_GPIO_Port GPIOA
-#define LED2_Pin GPIO_PIN_1
-#define LED2_GPIO_Port GPIOA
+#define LED_Pin GPIO_PIN_1
+#define LED_GPIO_Port GPIOA
+#define UART2_TX_Pin GPIO_PIN_2
+#define UART2_TX_GPIO_Port GPIOA
 #define SERVO_OUT2_Pin GPIO_PIN_3
 #define SERVO_OUT2_GPIO_Port GPIOA
 #define SERVO_OUT1_Pin GPIO_PIN_5
@@ -133,6 +135,10 @@ void DebugMain(uint32_t val);
 #define FAN_OUT_GPIO_Port GPIOC
 #define DCMI_XCLK_Pin GPIO_PIN_8
 #define DCMI_XCLK_GPIO_Port GPIOA
+#define UART1_TX_Pin GPIO_PIN_9
+#define UART1_TX_GPIO_Port GPIOA
+#define UART1_RX_Pin GPIO_PIN_10
+#define UART1_RX_GPIO_Port GPIOA
 #define SPI1_NCS_Pin GPIO_PIN_15
 #define SPI1_NCS_GPIO_Port GPIOA
 #define FMC_D2_Pin GPIO_PIN_0
@@ -145,6 +151,8 @@ void DebugMain(uint32_t val);
 #define FMC_NRD_GPIO_Port GPIOD
 #define FMC_NWR_Pin GPIO_PIN_5
 #define FMC_NWR_GPIO_Port GPIOD
+#define UART2_RX_Pin GPIO_PIN_6
+#define UART2_RX_GPIO_Port GPIOD
 #define FMC_NCS_Pin GPIO_PIN_7
 #define FMC_NCS_GPIO_Port GPIOD
 #define SPI1_SCK_Pin GPIO_PIN_3
@@ -169,14 +177,17 @@ void DebugMain(uint32_t val);
 #define	LCD_CS_Pin    	TFT_CS_Pin
 #endif
 
-#define	LCD_LED_GPIO_Port	TFT_BL_GPIO_Port
-#define	LCD_LED_Pin 		TFT_BL_Pin
+#define	LCD_BL_GPIO_Port	TFT_BL_GPIO_Port
+#define	LCD_BL_Pin 	    	TFT_BL_Pin
 
-#define	CAMERA_RESET_GPIO_Port	DCMI_RESET_GPIO_Port
-#define	CAMERA_RESET_Pin		DCMI_RESET_Pin
+#define	CAMERA_RESET_GPIO_Port	NRESET_OUT_GPIO_Port
+#define	CAMERA_RESET_Pin		NRESET_OUT_Pin
 
 #define CAMERA_PWDN_GPIO_Port 	DCMI_PWDN_GPIO_Port
 #define CAMERA_PWDN_Pin     	DCMI_PWDN_Pin
+
+#define	huart_ADC	huart2
+#define	huart_debug	huart1
 
 /* USER CODE END Private defines */
 
