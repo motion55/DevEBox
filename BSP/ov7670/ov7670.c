@@ -34,7 +34,7 @@
 #define OV7670_FRAME_SIZE_WORDS       (OV7670_FRAME_SIZE_BYTES / 4U)
 
 #if (OV7670_STREAM_MODE != OV7670_STREAM_MODE_BY_FRAME)
-#define DISPLAY_BUFFER_ADDR			  (0xD0000000)
+//#define DISPLAY_BUFFER_ADDR			  (0xD0000000)
 #endif
 #define DISPLAY_WIDTH_SIZE_BYTES      (DISPLAY_WIDTH * OV7670_RGB565_BYTES)
 #define DISPLAY_WIDTH_SIZE_WORDS      (DISPLAY_WIDTH_SIZE_BYTES / 4U)
@@ -253,7 +253,7 @@ static struct
 #ifdef	DISPLAY_BUFFER_ADDR
 uint8_t* img_buffer = (uint8_t*)DISPLAY_BUFFER_ADDR;
 #else
-uint8_t img_buffer[OV7670_BUFFER_SIZE_BYTES] __attribute__((section(".CAM_Buffer_section")));
+uint8_t img_buffer[OV7670_BUFFER_SIZE_BYTES] CAM_BUFFER_SECTION;
 #endif
 
 uint32_t line_counter;

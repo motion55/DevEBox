@@ -189,6 +189,12 @@ void DebugMain(uint32_t val);
 #define	huart_ADC	huart2
 #define	huart_debug	huart1
 
+#define	DMA_BUFFER_SECTION	\
+		__attribute__((section(".DMABufferSection"))) __attribute__((aligned(32)))
+
+#define	CAM_BUFFER_SECTION	\
+		__attribute__((section(".CAM_Buffer_section")))
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

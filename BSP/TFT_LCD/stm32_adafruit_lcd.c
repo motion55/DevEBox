@@ -92,6 +92,8 @@ EndDependencies */
 #include "stm32_adafruit_lcd.h"
 #include "Fonts/fonts.h"
 
+#include "main.h"
+
 /* @defgroup STM32_ADAFRUIT_LCD_Private_Defines */
 #define POLY_X(Z)             ((int32_t)((Points + (Z))->X))
 #define POLY_Y(Z)             ((int32_t)((Points + (Z))->Y))
@@ -109,7 +111,7 @@ LCD_DrawPropTypeDef DrawProp;
 extern LCD_DrvTypeDef  *lcd_drv;
 
 /* Font bitmap buffer */
-static uint16_t fontbitmapbuf[FONTBITMAPBUFSIZE] = {0};
+static uint16_t fontbitmapbuf[FONTBITMAPBUFSIZE] DMA_BUFFER_SECTION = {0};
 
 /* @defgroup STM32_ADAFRUIT_LCD_Private_FunctionPrototypes */ 
 static void DrawChar(uint16_t Xpos, uint16_t Ypos, const uint8_t *c);

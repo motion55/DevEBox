@@ -101,10 +101,8 @@ void DebugPutChar(char ch);
 void DebugSend(char *message);
 
 #ifdef huart_debug
-__attribute__((section(".DMABufferSection"))) __attribute__((aligned(32)))
-uint8_t dbg_RX_DMA_Buffer[RX_DMA_BUFFER_SIZE];
-__attribute__((section(".DMABufferSection"))) __attribute__((aligned(32)))
-uint8_t dbg_TX_DMA_Buffer[TX_DMA_BUFFER_SIZE];
+uint8_t dbg_RX_DMA_Buffer[RX_DMA_BUFFER_SIZE] DMA_BUFFER_SECTION;
+uint8_t dbg_TX_DMA_Buffer[TX_DMA_BUFFER_SIZE] DMA_BUFFER_SECTION;
 
 UART_DATA_t debug_data = {
 	.huart = &huart_debug,
