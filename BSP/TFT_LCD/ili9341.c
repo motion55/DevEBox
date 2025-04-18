@@ -59,12 +59,12 @@ LCD_DrvTypeDef  *lcd_drv = &ili9341_drv;
 
 /* transaction data */
 #define TRANSDATAMAXSIZE  4
-static union
+union
 {
   char       c[TRANSDATAMAXSIZE];
   uint8_t   d8[TRANSDATAMAXSIZE];
   uint16_t d16[TRANSDATAMAXSIZE / 2];
-} transdata;
+}transdata;
 
 #define ILI9341_NOP            0x00
 #define ILI9341_SWRESET        0x01
@@ -191,11 +191,11 @@ static union
 #define ILI9341_IO_INITIALIZED     0x02
 static  uint8_t   Is_ili9341_Initialized = 0;
 
-static const uint8_t EntryRightThenUp = ILI9341_MAD_DATA_RIGHT_THEN_UP;
-static const uint8_t EntryRightThenDown = ILI9341_MAD_DATA_RIGHT_THEN_DOWN;
+const uint8_t EntryRightThenUp = ILI9341_MAD_DATA_RIGHT_THEN_UP;
+const uint8_t EntryRightThenDown = ILI9341_MAD_DATA_RIGHT_THEN_DOWN;
 
 /* the last set drawing direction is stored here */
-static uint8_t LastEntry = ILI9341_MAD_DATA_RIGHT_THEN_DOWN;
+uint8_t LastEntry = ILI9341_MAD_DATA_RIGHT_THEN_DOWN;
 
 static  uint16_t  yStart, yEnd;
 

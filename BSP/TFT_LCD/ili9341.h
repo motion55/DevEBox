@@ -3,7 +3,7 @@
    - 1: 320x240 landscape (plug in left)
    - 2: 240x320 portrait (plug in botton)
    - 3: 320x240 landscape (plug in right) */
-#define  ILI9341_ORIENTATION      1
+#define  ILI9341_ORIENTATION      3
 
 /* To clear the screen before display turning on ?
    - 0: does not clear
@@ -19,7 +19,7 @@
 #define  ILI9341_READBITDEPTH      24
 
 // ILI9341 physic resolution (in 0 orientation)
-#define  ILI9341_LCD_PIXEL_WIDTH  320
-#define  ILI9341_LCD_PIXEL_HEIGHT 240
+#define  ILI9341_LCD_PIXEL_WIDTH  240
+#define  ILI9341_LCD_PIXEL_HEIGHT 320
 
 extern LCD_DrvTypeDef ili9341_drv;

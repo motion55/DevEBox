@@ -34,7 +34,7 @@ extern "C" {
 #include "spi.h"
 #include "i2c.h"
 #include "debug_console.h"
-#include "stm32_adafruit_lcd.h"
+#include <stm32_adafruit_lcd.h>
 
 /* USER CODE END Includes */
 

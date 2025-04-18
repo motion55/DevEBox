@@ -132,19 +132,23 @@ int main(void)
   MX_TIM8_Init();
   /* USER CODE BEGIN 2 */
 #if	_USE_TFT_
-  BSP_LCD_Init();
-  BSP_LCD_DisplayOn();
+	BSP_LCD_Init();
+	BSP_LCD_DisplayOn();
 #endif
 #if	_USE_LCD_
-  lcd_init();
+	lcd_init();
 #endif
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  DebugInit();
+	HAL_GPIO_WritePin(CAMERA_PWDN_GPIO_Port, CAMERA_PWDN_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_SET);
 
-	while (1) {
+	DebugInit();
+
+	while (1)
+	{
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -155,22 +159,23 @@ int main(void)
 		HAL_Delay(100);
 		DebugTask();
 		uint32_t ADC_val = CalcTemperature();
-		if (ADC_val>0)
+		if (ADC_val > 0)
 		{
 			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
-			HAL_UART_Transmit(&huart_ADC, (uint8_t*)buffer, strlen(buffer), 100);
+			HAL_UART_Transmit(&huart_ADC, (uint8_t*) buffer, strlen(buffer),
+					100);
 			//DebugSend("\r\n Hello");
 #if	_USE_TFT_
-			uint8_t *header = (uint8_t*)"      ADC_Val     ";
+			uint8_t *header = (uint8_t*) "      ADC_Val     ";
 			BSP_LCD_DisplayStringAtLine(2, header);
 			sprintf(buffer, "   %10ld   ", ADC_val);
-			BSP_LCD_DisplayStringAtLine(4, (uint8_t*)buffer);
+			BSP_LCD_DisplayStringAtLine(4, (uint8_t*) buffer);
 #endif
 #if	_USE_LCD_
-			lcd_put_cur(0,0);
+			lcd_put_cur(0, 0);
 			lcd_send_string("    ADC_Val     ");
-			lcd_put_cur(1,0);
+			lcd_put_cur(1, 0);
 			sprintf(buffer, "   %10ld   ", ADC_val);
 			lcd_send_string(buffer);
 #endif
@@ -267,7 +272,8 @@ void PeriphCommonClock_Config(void)
 /* USER CODE BEGIN 4 */
 void DebugMain(uint32_t val)
 {
-	switch (val) {
+	switch (val)
+	{
 	case 0:
 	{
 		DebugPrint("\r\n OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);");
@@ -278,7 +284,7 @@ void DebugMain(uint32_t val)
 	case 1:
 	{
 		uint8_t temp1, temp2;
-		if (ov7670_read(OV7670_REG_PID, &temp1)==HAL_OK)
+		if (ov7670_read(OV7670_REG_PID, &temp1) == HAL_OK)
 		{
 			ov7670_read(OV7670_REG_VER, &temp2);
 			DebugPrint("\r\n ReadID %02X %02X", temp1, temp2);
@@ -291,9 +297,12 @@ void DebugMain(uint32_t val)
 		break;
 	case 2:
 	{
-		if (OV7670_isDriverBusy()) {
+		if (OV7670_isDriverBusy())
+		{
 			DebugPrint("\r\n OV7670_isDriver is Busy");
-		} else {
+		}
+		else
+		{
 			DebugPrint("\r\n OV7670_isDriver is NOY Busy");
 		}
 	}
@@ -342,7 +351,8 @@ void Error_Handler(void)
   /* USER CODE BEGIN Error_Handler_Debug */
 	/* User can add his own implementation to report the HAL error return state */
 	__disable_irq();
-	while (1) {
+	while (1)
+	{
 	}
   /* USER CODE END Error_Handler_Debug */
 }
