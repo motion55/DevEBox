@@ -195,6 +195,8 @@ void DebugMain(uint32_t val);
 #define	CAM_BUFFER_SECTION	\
 		__attribute__((section(".CAM_Buffer_section")))
 
+#define	SERVO_TIMER_HANDLE	htim2
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

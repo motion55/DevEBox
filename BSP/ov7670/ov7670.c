@@ -471,6 +471,7 @@ void HAL_DCMI_VsyncEventCallback(DCMI_HandleTypeDef *hdcmi)
 void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
     frame_counter++;
+	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 }
 
 #else
