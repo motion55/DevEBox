@@ -61,6 +61,22 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+extern uint8_t img_buffer[];
+char LCD_Busy = 0;
+
+void LCD_IO_DmaTxCpltCallback(SPI_HandleTypeDef *hspi)
+{
+	LCD_Busy = 0;
+}
+
+void RefreshCamera()
+{
+	if (!LCD_Busy)
+	{
+		LCD_Busy = 0;
+		BSP_LCD_DrawRGB16Image(0, 0, 320, 240, (uint16_t *)img_buffer);
+	}
+}
 
 /* USER CODE END PV */
 
@@ -134,6 +150,10 @@ int main(void)
 #if	_USE_TFT_
 	BSP_LCD_Init();
 	BSP_LCD_DisplayOn();
+	{
+		uint32_t size = 320l * 240 * 2;
+		memset(img_buffer, 0, size);
+	}
 #endif
 #if	_USE_LCD_
 	lcd_init();
@@ -167,10 +187,11 @@ int main(void)
 					100);
 			//DebugSend("\r\n Hello");
 #if	_USE_TFT_
-			uint8_t *header = (uint8_t*) "      ADC_Val     ";
-			BSP_LCD_DisplayStringAtLine(2, header);
-			sprintf(buffer, "   %10ld   ", ADC_val);
-			BSP_LCD_DisplayStringAtLine(4, (uint8_t*) buffer);
+//			uint8_t *header = (uint8_t*) "      ADC_Val     ";
+//			BSP_LCD_DisplayStringAtLine(2, header);
+//			sprintf(buffer, "   %10ld   ", ADC_val);
+//			BSP_LCD_DisplayStringAtLine(4, (uint8_t*) buffer);
+			RefreshCamera();
 #endif
 #if	_USE_LCD_
 			lcd_put_cur(0, 0);
@@ -270,8 +291,6 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-extern uint8_t img_buffer[];
-
 void DebugMain(uint32_t val)
 {
 	switch (val)
@@ -324,9 +343,14 @@ void DebugMain(uint32_t val)
 		memset(img_buffer, 0, size);
 	}
 		break;
+	case 5:
+	{
+		DebugPrint("\r\n BSP_LCD_DrawRGB16Image");
+		BSP_LCD_DrawRGB16Image(0, 0, 320, 240, (uint16_t *)img_buffer);
+	}
+		break;
 	}
 }
-
 /* USER CODE END 4 */
 
 /**
