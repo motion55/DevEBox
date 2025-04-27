@@ -104,7 +104,7 @@ void SetServoPos(uint8_t servo_no, int16_t pos)
 	if (pos<-1000)
 		pos = -1000;
 
-	uint32_t duty = 300000l + (100l * pos);
+	uint32_t duty = 300000l + (200l * pos);
 	switch (servo_no) {
 	case 1:
 		((TIM_HandleTypeDef*)&SERVO_TIMER_HANDLE)->Instance->CCR1 = duty;
@@ -199,31 +199,51 @@ int main(void)
 		OV7670_Start();
 	}
 
+	{
+		HAL_TIM_Base_Start(&htim2);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+		SetServoPos(1,0);
+		SetServoPos(2,0);
+	}
+
+	int counter = 0;
+	int position = 1000;
+
 	while (1)
 	{
+		counter++;
+		if (counter>10)
+		{
+			counter = 0;
+			position = -position;
+			SetServoPos(1,position);
+			SetServoPos(2,position);
+			DebugPrint("\r\n SetServoPos(1,%d);", position);
+		}
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
 		//HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_SET);
 		HAL_Delay(100);
 		DebugTask();
+		RefreshCamera();
 		//HAL_GPIO_WritePin(LED_GPIO_Port, LED_Pin, GPIO_PIN_RESET);
 		HAL_Delay(100);
 		DebugTask();
+		RefreshCamera();
 		uint32_t ADC_val = CalcTemperature();
 		if (ADC_val > 0)
 		{
 			char buffer[40];
 			sprintf(buffer, "\r\n ADC_val = %10ld", ADC_val);
-			HAL_UART_Transmit(&huart_ADC, (uint8_t*) buffer, strlen(buffer),
-					100);
-			//DebugSend("\r\n Hello");
+			HAL_UART_Transmit(&huart_ADC, (uint8_t*) buffer, strlen(buffer), 100);
 #if	_USE_TFT_
 //			uint8_t *header = (uint8_t*) "      ADC_Val     ";
 //			BSP_LCD_DisplayStringAtLine(2, header);
 //			sprintf(buffer, "   %10ld   ", ADC_val);
 //			BSP_LCD_DisplayStringAtLine(4, (uint8_t*) buffer);
-			RefreshCamera();
 #endif
 #if	_USE_LCD_
 			lcd_put_cur(0, 0);
