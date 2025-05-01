@@ -256,10 +256,11 @@ uint8_t* img_buffer = (uint8_t*)DISPLAY_BUFFER_ADDR;
 uint8_t img_buffer[OV7670_BUFFER_SIZE_BYTES] CAM_BUFFER_SECTION;
 #endif
 
-uint32_t line_counter;
-uint32_t frame_counter;
-uint32_t DCMI_IER;
-
+volatile uint32_t line_counter;
+volatile uint32_t frame_counter;
+volatile uint32_t DCMI_IER;
+volatile uint32_t frame_delay;
+volatile uint32_t frame_ticks = 0;
 
 
 /******************************************************************************
@@ -430,8 +431,8 @@ uint8_t OV7670_isDriverBusy(void)
     uint32_t _line_counter = line_counter;
     retVal = (OV7670.state == BUSY) ? TRUE : FALSE;
     __enable_irq();
-    DebugPrint("\r\n line_counter=%8ld %8ld %8ld %8lX %8lX",
-    		_line_counter, frame_counter, OV7670.lineCnt, buf_addr, DCMI_IER);
+    DebugPrint("\r\n line_counter=%8ld %8ld %8ld %8lX %8ld",
+    		_line_counter, frame_counter, OV7670.lineCnt, buf_addr, frame_delay);
     return retVal;
 }
 
@@ -472,6 +473,9 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 {
     frame_counter++;
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+	uint32_t ticks = HAL_GetTick();
+	frame_delay = ticks - frame_ticks;
+	frame_ticks = ticks;
 }
 
 #else
