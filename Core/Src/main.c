@@ -38,6 +38,7 @@
 #include "i2c-lcd.h"
 #include "debug_console.h"
 #include "ov7670.h"
+#include "AS7265X.h"
 
 /* USER CODE END Includes */
 
@@ -193,6 +194,8 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	AS7265X_begin(&hi2c_as7265x);
+
 	HAL_GPIO_WritePin(CAMERA_PWDN_GPIO_Port, CAMERA_PWDN_Pin, GPIO_PIN_RESET);
 	HAL_GPIO_WritePin(CAMERA_RESET_GPIO_Port, CAMERA_RESET_Pin, GPIO_PIN_SET);
 
