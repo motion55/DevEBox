@@ -196,6 +196,7 @@ void DebugMain(uint32_t val);
 		__attribute__((section(".CAM_Buffer_section")))
 
 #define	SERVO_TIMER_HANDLE	htim2
+#define	FAN_TIMER_HANDLE	htim8
 
 /* USER CODE END Private defines */
 

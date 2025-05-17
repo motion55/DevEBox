@@ -116,6 +116,15 @@ void SetServoPos(uint8_t servo_no, int16_t pos)
 	}
 }
 
+void SetFanDuty(float duty)
+{
+	if (duty>100.0f)
+		duty = 100.0f;
+
+	uint32_t _duty = duty * (10000/100.0f);
+	((TIM_HandleTypeDef*)&FAN_TIMER_HANDLE)->Instance->CCR3 = _duty;
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -206,9 +215,11 @@ int main(void)
 	}
 
 	{
-		HAL_TIM_Base_Start(&htim2);
-		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-		HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_4);
+		HAL_TIM_Base_Start(&SERVO_TIMER_HANDLE);
+		HAL_TIM_PWM_Start(&SERVO_TIMER_HANDLE, TIM_CHANNEL_1);
+		HAL_TIM_PWM_Start(&SERVO_TIMER_HANDLE, TIM_CHANNEL_4);
+		HAL_TIM_Base_Start(&FAN_TIMER_HANDLE);
+		HAL_TIM_PWM_Start(&FAN_TIMER_HANDLE, TIM_CHANNEL_3);
 		SetServoPos(1,0);
 		SetServoPos(2,0);
 	}
