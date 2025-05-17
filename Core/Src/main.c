@@ -366,8 +366,8 @@ void DebugMain(uint32_t val)
 	{
 	case 0:
 	{
-		DebugPrint("\r\n OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);");
-		OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);
+		DebugPrint("\r\n OV7670_Start()");
+		//OV7670_Init(&hdcmi, &hi2c_dcmi, 0, 0);
 		OV7670_Start();
 	}
 		break;

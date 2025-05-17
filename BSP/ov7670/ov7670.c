@@ -476,6 +476,7 @@ void HAL_DCMI_FrameEventCallback(DCMI_HandleTypeDef *hdcmi)
 	uint32_t ticks = HAL_GetTick();
 	frame_delay = ticks - frame_ticks;
 	frame_ticks = ticks;
+	OV7670_Stop();
 }
 
 #else
